@@ -15,7 +15,7 @@ module Garb
     end
 
     def entries
-      parsed_response ? [parsed_response['feed']['entry']].flatten : []
+      parsed_response ? [parsed_response['feed']['entry']].flatten.compact : []
     end
 
     def segments

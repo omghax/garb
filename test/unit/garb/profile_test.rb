@@ -15,6 +15,15 @@ module Garb
         assert_received(AccountFeedRequest, :new) {|e| e.with(@session)}
       end
 
+      should "return an empty array when there are no profiles" do
+        afr = AccountFeedRequest.new
+        afr.stubs(:parsed_response).returns(Crack::XML.parse(read_fixture('profile_feed_no_entries.xml')))
+        AccountFeedRequest.stubs(:new).returns(afr)
+
+        assert_equal [], Profile.all(@session)
+        assert_received(AccountFeedRequest, :new) {|e| e.with(@session)}
+      end
+
       should "return the first profile for a given web property id" do
         profile1 = stub(:web_property_id => '12345', :id => 'abcdef')
         profile2 = stub(:web_property_id => '67890', :id => 'ghijkl')
